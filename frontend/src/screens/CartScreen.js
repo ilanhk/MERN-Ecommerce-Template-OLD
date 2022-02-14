@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem } from 'react-bootstrap';
 import Message from '../components/Message';
-import { addToCart } from '../actions/cartActions';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 
 
 const CartScreen = () => {
@@ -25,7 +25,11 @@ const CartScreen = () => {
     }, [dispatch, id, qty]);
 
     const removeFromCartHandler = (id)=>{
-        console.log('remove')
+        dispatch(removeFromCart(id));
+    };
+
+    const checkoutHandler = ()=>{
+        navigate(`/login?redirect=shipping`);
     };
   
     return (
@@ -38,13 +42,13 @@ const CartScreen = () => {
             </Message>: (
                 <ListGroup variant='flush'>
                     {cartItems.map((item)=>(
-                        <ListGroupItem key={item.product}>
+                        <ListGroupItem key={item.productId}>
                             <Row>
                                 <Col md={2}>
                                     <Image src={item.image} alt={item.name} fluid rounded/>
                                 </Col>
                                 <Col md={3}>
-                                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                                    <Link to={`/product/${item.productId}`}>{item.name}</Link>
                                 </Col>
                                 <Col md={2}>${item.price}</Col>
                                 <Col md={2}>
@@ -59,7 +63,7 @@ const CartScreen = () => {
                                     </Form.Select>
                                 </Col>
                                 <Col md={2}>
-                                    <Button type='button' variant='light' onClick={removeFromCartHandler(item.product)}>
+                                    <Button type='button' variant='light' onClick={() => removeFromCartHandler(item.productId)}>
                                         <i className='fas fa-trash'></i>
                                     </Button>
                                 </Col>
@@ -69,14 +73,31 @@ const CartScreen = () => {
                 </ListGroup>
             )}
         </Col>
-        <Col md={2}>
-            
-        </Col>
-        <Col md={2}>
-            
+        <Col md={4}>
+            <Card>
+                <ListGroup variant='flush'>
+                    <ListGroupItem>
+                        <h2>Subtotal: ({cartItems.reduce((accumulator, item)=> accumulator + item.qty, 0 )}) items</h2>
+                        ${cartItems.reduce((acc, item)=> acc + item.qty * item.price, 0).toFixed(2)}
+                    </ListGroupItem>
+                    <ListGroupItem>
+                        <div className="d-grid gap-2">
+                            <Button 
+                                type='button' 
+                                className='btn-block' 
+                                disabled={cartItems.length === 0} 
+                                onClick={checkoutHandler}>
+                                    Go To Checkout
+                            </Button>
+                        </div>
+                    </ListGroupItem>
+                </ListGroup>
+            </Card>
         </Col>
     </Row>
   )
 }
 
 export default CartScreen;
+//. reduce takes in an arrow function with 1st argument being an accumulator and 2nd the current item. This , 0 2nd arguement means we want the accumulator to start at zero
+// .toFixed(2) this mean we want 2 decimal places

@@ -20,7 +20,6 @@ router.get('/', asyncHandler(async (req, res)=>{
 // @access   Public
 router.get('/:id', asyncHandler(async (req, res)=>{
     const product = await Product.findById(req.params.id); //req.params.id this is from the url
-
     if (product){
         res.json(product);
     } else {

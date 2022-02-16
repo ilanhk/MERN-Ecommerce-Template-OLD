@@ -54,7 +54,7 @@ const CartScreen = () => {
                                 <Col md={2}>
                                     <Form.Select as='select' value={item.qty} onChange={(e)=> 
                                         dispatch(
-                                            addToCart(item.prodcut, Number(e.target.value))
+                                            addToCart(item.productId, Number(e.target.value))
                                         )
                                     }>
                                         {[...Array(item.countInStock).keys()].map((x) => (

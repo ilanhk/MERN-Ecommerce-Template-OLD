@@ -6,6 +6,7 @@ import dotenv from 'dotenv'; // to make .env file the docs: https://www.npmjs.co
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from "./routes/userRoutes.js"
 
 dotenv.config();
 
@@ -13,11 +14,14 @@ connectDB();
 
 const app = express();
 
+app.use(express.json()) //express.json will allow us to accept JSON data in the body
+
 app.get('/', (req, res)=>{
     res.send('API is running');
 });
 
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(notFound); //this is for 404 page
 

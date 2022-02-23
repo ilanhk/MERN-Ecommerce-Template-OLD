@@ -28,6 +28,16 @@ userSchema.methods.matchPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password) //compare compares the 1st argument enteredPassword to the encrypted password 2nd argument
 };
 
+//To encypt the password
+userSchema.pre('save', async function(next){
+    if (!this.isModified('password')){
+        next()
+    } //if password has not been added or modified move on else hash password
+
+    const salt = await bcrypt.genSalt(10); //creates a salt with 10 rounds
+    this.password = await bcrypt.hash(this.password, salt); //hash the password
+}); // .pre is b4. In this case b4 we save we want to run
+
 const User = mongoose.model('User', userSchema); // we want to create the model User from this schema
 
 export default User;

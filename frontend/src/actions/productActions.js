@@ -45,7 +45,7 @@ export const listProductDetails = (id)=> async (dispatch) =>{
         dispatch({
             type: PRODUCT_DETAILS_FAILURE, 
             payload: error.response && error.response.data.message 
-                ? error.response.data.message : error.message //want to make sure to get the error message
+                ? error.response.data.message : error.message 
         });
     }
 };

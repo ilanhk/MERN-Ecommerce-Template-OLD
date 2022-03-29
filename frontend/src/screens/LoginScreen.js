@@ -1,27 +1,45 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelect } from 'react-redux';
+import { useDispatch, useSelect, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { login } from '../actions/userActions';
-import { redirect } from 'express/lib/response';
 
-const LoginScreen = ({ location }) => {
+
+const LoginScreen = () => {
   const [ email, setEmail] = useState('');
   const [ password, setPassword] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate(); //props.history doesnt exist so use useNavigate()
 
-  const redirect = location.search ? location.search.split('=')[1] : '/';
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state)=> state.userLogin);
 
+  const { loading, error, userInfo } = userLogin;
+
+  const params = useParams();
+  const redirect = params.search ? params.search : '/';
+
+  useEffect(()=>{
+      if (userInfo){
+        navigate(redirect)
+      }
+  }, [navigate, userInfo, redirect]);
+
+    
   const submitHandler = (e)=>{
-      e.preventDefault() // prevent page from refreshing
-      //DISPATCH LOGIN
+      e.preventDefault(); // prevent page from refreshing
+      dispatch(login(email, password))
   };
 
   return (
     <FormContainer>
         <h1>Sign In</h1>
+        {error && <Message variant='danger'>{error}</Message>}
+        {loading && <Loader/>}
         <Form onSubmit={submitHandler}>
             <Form.Group controlId='email'>
                 <Form.Label>Email Address</Form.Label>

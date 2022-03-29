@@ -14,6 +14,7 @@ connectDB();
 
 const app = express();
 
+
 app.use(express.json()) //express.json will allow us to accept JSON data in the body
 
 app.get('/', (req, res)=>{

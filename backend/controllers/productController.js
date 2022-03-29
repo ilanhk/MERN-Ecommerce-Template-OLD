@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler"; // express-async-handler so that you dont have to do try catch to catch error of every route promise. docs: https://www.npmjs.com/package/express-async-handler/v/1.1.4
 import Product from "../models/productModel.js";
 
-// @desc    Fetch single product
+// @desc    Fetch all products
 // @route   GET /api/products
 // @access   Public
 const getProducts = asyncHandler(async(req, res)=>{

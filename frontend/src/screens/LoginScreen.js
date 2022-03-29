@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelect, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -12,7 +11,6 @@ import { login } from '../actions/userActions';
 const LoginScreen = () => {
   const [ email, setEmail] = useState('');
   const [ password, setPassword] = useState('');
-  const location = useLocation();
   const navigate = useNavigate(); //props.history doesnt exist so use useNavigate()
 
   const dispatch = useDispatch();
